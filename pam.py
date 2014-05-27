@@ -6,7 +6,7 @@
 # daveti@cs.uoregon.edu
 # http://daveti.blog.com
 
-from util import importData, pearson_distance, euclidean_distance, manhattan_distance
+from util import importData, pearson_distance, euclidean_distance, manhattan_distance, direct_distance
 import random
 import sys
 import time
@@ -16,9 +16,10 @@ initMedoidsFixed = False # Fix the init value of medoids for performance compari
 debugEnabled = True # Debug
 distances_cache = {}	# Save the tmp distance for acceleration (idxMedoid, idxData) -> distance
  
-def totalCost(data, costF_idx, medoids_idx, cacheOn=False):
+def totalCost(data, costF_idx, medoids_idx, cacheOn=False, distList=[]):
 	'''
 	Compute the total cost and do the clustering based on certain cost function
+	(that is, assign each data point to certain cluster given the medoids)
 	'''
 	# Init the cluster
 	size = len(data)
@@ -46,6 +47,9 @@ def totalCost(data, costF_idx, medoids_idx, cacheOn=False):
 				elif costF_idx == 2:
 					# pearson_distance
 					tmp = pearson_distance(data[m], data[i])
+				elif costF_idx == 3:
+					# pearson_distance
+					tmp = direct_distance(data[m], data[i], distList)				
 				else:
 					print('Error: unknown cost function idx: ' % (costF_idx))
 			if cacheOn == True:
@@ -63,7 +67,7 @@ def totalCost(data, costF_idx, medoids_idx, cacheOn=False):
 	return(total_cost, medoids)
      
  
-def kmedoids(data, k):
+def kmedoids(data, k, COST=0):
 	'''
 	kMedoids - PAM implemenation
 	See more : http://en.wikipedia.org/wiki/K-medoids
@@ -82,7 +86,7 @@ def kmedoids(data, k):
 		medoids_idx = random.sample([i for i in range(size)], k)
 	else:
 		medoids_idx = [i for i in range(k)]
-	pre_cost, medoids = totalCost(data, 0, medoids_idx)
+	pre_cost, medoids = totalCost(data, COST, medoids_idx)
 	if debugEnabled == True:
 		print('pre_cost: ', pre_cost)
 		#print('medioids: ', medoids)
@@ -94,14 +98,14 @@ def kmedoids(data, k):
 	while True:
 		for m in medoids:
 			for item in medoids[m]:
-				# NOTE: both m and item are idx!
+				# NOTE: both m and item are idx!  (you meant from the same cluster?)
 				if item != m:
 					# Swap m and o - save the idx
 					idx = medoids_idx.index(m)
 					# This is m actually...
                     			swap_temp = medoids_idx[idx]
                     			medoids_idx[idx] = item
-                    			tmp_cost, tmp_medoids = totalCost(data, 0, medoids_idx)
+                    			tmp_cost, tmp_medoids = totalCost(data, COST, medoids_idx)
 					# Find the lowest cost
                     			if tmp_cost < current_cost:
 						best_choice = list(medoids_idx) # Make a copy
