@@ -50,3 +50,12 @@ def pearson_distance(vector1, vector2):
  
 	if den == 0 : return 0.0
 	return(1.0 - num/den)
+
+def direct_distance(vector1, vector2, distList):
+	"""
+	Return the distance directly from distance matrix (e.g. in graphs).
+	Distance should be list of lists, like the output of Floyd-Warshall algorithm in networkX
+	"""
+	dist = distList[vector1][vector2]
+	return(dist)
+	
