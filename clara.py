@@ -69,7 +69,7 @@ def averageCost(data, costF_idx, medoids_idx, cacheOn=False):
 
 		
  
-def clara(data, k):
+def clara(data, k, COST=0):
 	'''
 	CLARA implemenation
 	1. For i = 1 to 5, repeat the following steps:
@@ -98,7 +98,7 @@ def clara(data, k):
 			sampling_data.append(data[idx])
 
 		# Run kmedoids for the sampling
-		pre_cost, pre_choice, pre_medoids = kmedoids(sampling_data, k)
+		pre_cost, pre_choice, pre_medoids = kmedoids(sampling_data, k, COST)
 		if debugEnabled == True:
 			print('pre_cost: ', pre_cost)
 			print('pre_choice: ', pre_choice)
@@ -113,7 +113,7 @@ def clara(data, k):
 			print('pre_choice2: ', pre_choice2)
 
 		# Clustering for all data set
-		tmp_avg_cost, tmp_medoids = averageCost(data, 0, pre_choice2)
+		tmp_avg_cost, tmp_medoids = averageCost(data, COST, pre_choice2)
 		if debugEnabled == True:
 			print('tmp_avg_cost: ', tmp_avg_cost)
 			print('tmp_medoids: ', tmp_medoids)
@@ -131,13 +131,14 @@ def main():
 	'''
 	Main function for PAM
 	'''
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 4:
 		print('Error: invalid number of parameters')
 		return(1)
 
 	# Get the parameters
 	filePath = sys.argv[1]
 	k = int(sys.argv[2])
+	COST = int(sys.argv[3])
 	if debugEnabled == True:
 		print('filePath: ', filePath)
 		print('k: ', k)
@@ -150,7 +151,7 @@ def main():
 
 	# Add timeing
 	startTime = time.time()
-	best_cost, best_choice, best_medoids = clara(data, k)
+	best_cost, best_choice, best_medoids = clara(data, k, COST)
 	endTime = time.time()
 
 	print('best_time: ', endTime - startTime)
