@@ -136,16 +136,18 @@ def main():
 	'''
 	Main function for PAM
 	'''
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 4:
 		print('Error: invalid number of parameters')
 		return(1)
 
 	# Get the parameters
 	filePath = sys.argv[1]
 	k = int(sys.argv[2])
+	COST = int(sys.argv[3])     # here it's obligatory, but in kmedoids(), optional. FIX IT
 	if debugEnabled == True:
 		print('filePath: ', filePath)
 		print('k: ', k)
+		print('cost function number: ', COST)   # better yet, display the name, not number FIX IT
 
 	# Run PAM for europe.txt
 	data = importData(filePath)
@@ -155,7 +157,7 @@ def main():
 
 	# Add timing here
 	startTime = time.time()
-	best_cost, best_choice, best_medoids = kmedoids(data, k)
+	best_cost, best_choice, best_medoids = kmedoids(data, k, COST)
 	endTime = time.time()
 
 	print('best_time: ', endTime - startTime)
