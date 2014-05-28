@@ -4,7 +4,7 @@
 # daveti@cs.uoregon.edu
 # http://daveti.blog.com
 
-from util import importData, euclidean_distance, manhattan_distance, pearson_distance
+from util import importData, euclidean_distance, manhattan_distance, pearson_distance, direct_distance
 from pam import kmedoids
 import random
 import sys
