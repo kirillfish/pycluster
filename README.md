@@ -1,23 +1,12 @@
-pycluster
+<h3>pycluster</h3>
 
-Python Clustering
+A graph community detection methods based on k-medoids.
 
-Including PAM and Clara algorithms
+What's new comparing to daveti's original work:
 
-Aug 17, 2013
+-- faster optimization heuristic
 
-Added parallel PAM implementation
+-- stable cores + their hierarchical clustering + scipy dendrograms
 
-Added performance comparison logging (set initMedoidsFixed = True)
-
-python pam_parallel.py euroTry.txt 4 4 > euroTry_parallel_4_4.log
-
-python pam.py euroTry.txt 4 > euroTry_4.log
-
--daveti
-
-May 31, 2013
-
-daveti@cs.uoregon.edu
-
-http://daveti.blog.com
+-- networkX visualization
+ 
